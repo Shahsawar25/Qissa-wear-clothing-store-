@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://backend-pink-beta-24.vercel.app/api',
+  baseURL: 'https://backend-git-main-shahsawar-khans-projects-0bb6dc58.vercel.app/api',
   // baseURL: 'http://localhost:5000/api',
   headers: { 'Content-Type': 'application/json' },
 });
