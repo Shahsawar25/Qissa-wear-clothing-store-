@@ -13,6 +13,11 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
 
+    image: {
+      type: String,
+      default: "",
+    },
+
     price: {
       type: Number,
       required: true,
@@ -138,35 +143,25 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
 
+    stripeSessionId: {
+      type: String,
+    },
+
+    stripePaymentIntent: {
+      type: String,
+    },
+
     paymentMethod: {
       type: String,
+      enum: ["COD", "Stripe"],
       default: "COD",
     },
 
     paymentStatus: {
       type: String,
-      enum: ["Unpaid", "Paid"],
+      enum: ["Unpaid", "Paid", "Failed"],
       default: "Unpaid",
     },
-    stripeSessionId: {
-    type: String,
-},
-
-stripePaymentIntent: {
-    type: String,
-},
-
-paymentMethod: {
-    type: String,
-    enum: ["COD", "Stripe"],
-    default: "COD",
-},
-
-paymentStatus: {
-    type: String,
-    enum: ["Unpaid", "Paid", "Failed"],
-    default: "Unpaid",
-},
   },
   {
     timestamps: true,

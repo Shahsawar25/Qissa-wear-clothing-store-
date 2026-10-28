@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
+import dns from "dns";
 import { env } from "./env.js";
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 export async function connectDB() {
   if (!env.MONGO_URI) {
@@ -13,7 +16,7 @@ export async function connectDB() {
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
 
-    if (env.NODE_ENV === "production") {
+    if (env.NODE_ENV === "prodAuction") {
       process.exit(1);
     }
 

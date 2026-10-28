@@ -12,21 +12,15 @@ function formatDate(dateStr) {
   });
 }
 
-function getFirstImage(order) {
-  if (order.items?.[0]?.product && typeof order.items[0].product === 'object' && order.items[0].product.images?.[0]?.url) {
-    return order.items[0].product.images[0].url;
-  }
-  return FALLBACK_IMAGE;
-}
-
 export default function OrderCard({ order }) {
   const navigate = useNavigate();
+  const firstImage = order.items?.[0]?.image || FALLBACK_IMAGE;
 
   return (
     <div className="order-card" onClick={() => navigate(`/orders/${order._id}`)}>
       <div className="order-card-top">
         <div className="order-card-img-wrap">
-          <img src={getFirstImage(order)} alt={order.items?.[0]?.name || 'Order'} />
+          <img src={firstImage} alt={order.items?.[0]?.name || 'Order'} />
           {order.items?.length > 1 && (
             <span className="order-card-count">+{order.items.length - 1}</span>
           )}

@@ -9,15 +9,21 @@ import './auth.css';
 export default function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, token } = useSelector((s) => s.auth);
+  const { loading, error, token, user } = useSelector((s) => s.auth);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (token) navigate('/');
-  }, [token, navigate]);
+    if (token) {
+      if (user?.role === 'admin') {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [token, user, navigate]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -29,7 +35,7 @@ export default function Signup() {
     dispatch(signupUser({ name, email, password })).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
         toast.success('Account created!');
-        navigate('/');
+        navigate('/', { replace: true });
       }
     });
   };

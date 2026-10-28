@@ -1,8 +1,8 @@
-
+import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import './layout.css';
 
-export default function MainLayout({ children }) {
+export default function MainLayout() {
   return (
     <div className="site-shell">
       <div className="top-strip">
@@ -10,7 +10,7 @@ export default function MainLayout({ children }) {
       </div>
       <Navbar />
       <main className="site-main">
-        {children}
+        <Outlet />
       </main>
       <footer className="site-footer">
         <div className="footer-content">

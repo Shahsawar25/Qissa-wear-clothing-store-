@@ -11,6 +11,12 @@ export const checkoutSchema = z.object({
   addressId: objectId,
 });
 
+export const updatePaymentStatusSchema = z.object({
+  paymentStatus: z.enum(["Paid"], {
+    errorMap: () => ({ message: "Payment status must be 'Paid'." }),
+  }),
+});
+
 export const updateOrderStatusSchema = z.object({
   status: z.enum(
     ["Confirmed", "Shipped", "Delivered", "Cancelled"],

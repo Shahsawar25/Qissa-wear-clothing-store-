@@ -6,6 +6,8 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
+  updateProductStock,
+  toggleProductStatus,
 } from "../controllers/productController.js";
 
 import { protect } from "../middlewares/auth.middleware.js";
@@ -25,5 +27,9 @@ router.post("/", protect, adminOnly, validate(productSchema), createProduct);
 router.put("/:id", protect, adminOnly, validate(productSchema), updateProduct);
 
 router.delete("/:id", protect, adminOnly, deleteProduct);
+
+router.patch("/:id/stock", protect, adminOnly, updateProductStock);
+
+router.patch("/:id/toggle-status", protect, adminOnly, toggleProductStatus);
 
 export default router;

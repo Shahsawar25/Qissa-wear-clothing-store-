@@ -126,6 +126,43 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
+export const updatePaymentStatus = async (req, res) => {
+  try {
+    const { paymentStatus } = req.body;
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    if (order.paymentStatus === "Paid") {
+      return res.status(400).json({
+        success: false,
+        message: "Order is already paid.",
+      });
+    }
+
+    order.paymentStatus = paymentStatus;
+
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Payment status updated to "${paymentStatus}".`,
+      data: order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;

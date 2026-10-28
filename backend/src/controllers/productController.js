@@ -208,3 +208,80 @@ export const deleteProduct = async (req, res) => {
     });
   }
 };
+
+export const updateProductStock = async (req, res) => {
+  try {
+    const { variantIndex, stock } = req.body;
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
+    }
+
+    if (variantIndex === undefined || variantIndex === null) {
+      // Update all variants stock (set all to same value) or do nothing
+      return res.status(400).json({
+        success: false,
+        message: "variantIndex is required.",
+      });
+    }
+
+    if (stock === undefined || stock < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid stock value is required.",
+      });
+    }
+
+    if (!product.variants || variantIndex >= product.variants.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid variant index.",
+      });
+    }
+
+    product.variants[variantIndex].stock = Number(stock);
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Stock updated successfully.",
+      data: product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const toggleProductStatus = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
+    }
+
+    product.isActive = !product.isActive;
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Product ${product.isActive ? "activated" : "deactivated"} successfully.`,
+      data: product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

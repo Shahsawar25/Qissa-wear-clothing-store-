@@ -20,4 +20,8 @@ export const orderService = {
   updateOrderStatus(orderId, status) {
     return api.put(`/orders/${orderId}/status`, { status });
   },
+
+  updatePaymentStatus(orderId, paymentStatus) {
+    return api.patch(`/orders/${orderId}/payment-status`, { paymentStatus });
+  },
 };

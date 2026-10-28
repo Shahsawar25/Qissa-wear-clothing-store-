@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
-import "dotenv/config";
 import bcrypt from "bcryptjs";
+import { env } from "../src/config/env.js";
 import User from "../src/models/User.js";
 
 async function createAdmin() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(env.MONGO_URI);
 
-  const existingAdmin = await User.findOne({ role: "admin" });
+  const existingAdmin = await User.findOne({
+    $or: [{ role: "admin" }, { email: "admin@qissa.com" }],
+  });
 
   if (existingAdmin) {
     console.log("Admin already exists.");
@@ -17,7 +19,7 @@ async function createAdmin() {
   const hashedPassword = await bcrypt.hash("Admin@123", 10);
 
   await User.create({
-    name: "Qissa Admin",
+    name: "Administrator",
     email: "admin@qissa.com",
     password: hashedPassword,
     role: "admin",

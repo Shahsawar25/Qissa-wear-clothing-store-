@@ -17,13 +17,6 @@ function formatDate(dateStr) {
   });
 }
 
-function getProductImage(item) {
-  if (item.product && typeof item.product === 'object' && item.product.images?.[0]?.url) {
-    return item.product.images[0].url;
-  }
-  return FALLBACK_IMAGE;
-}
-
 function SectionHead({ icon: Icon, title }) {
   return (
     <div className="od-section-head">
@@ -132,7 +125,7 @@ export default function OrderDetails() {
                   return (
                     <div key={idx} className="od-item">
                       <div className="od-item-img">
-                        <img src={getProductImage(item)} alt={item.name} />
+                        <img src={item.image || FALLBACK_IMAGE} alt={item.name} />
                       </div>
                       <div className="od-item-info">
                         <p className="od-item-name">{item.name}</p>

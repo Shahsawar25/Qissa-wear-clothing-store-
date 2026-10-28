@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Search, ShoppingBag, User, Heart, X, ArrowRight, LogOut, ChevronDown, Menu } from 'lucide-react';
+import { Search, ShoppingBag, User, Heart, X, ArrowRight, ChevronDown, Menu } from 'lucide-react';
 import { catalogProducts, categoryConfig } from '../../data/catalog';
 import { logout } from '../../features/auth/authSlice';
 import { fetchCart } from '../../features/cart/cartSlice';
@@ -94,6 +94,8 @@ export default function Navbar() {
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const megaRef = useRef(null);
   const timeoutRef = useRef(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
   const { token } = useSelector((s) => s.auth);
   const { totalItems } = useSelector((s) => s.cart);
@@ -108,6 +110,16 @@ export default function Navbar() {
     const handler = () => setCartOpen(true);
     window.addEventListener('qissa:cart-open', handler);
     return () => window.removeEventListener('qissa:cart-open', handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
   const handleMegaEnter = (index) => {
@@ -200,9 +212,21 @@ export default function Navbar() {
 
         <div className="navbar-actions">
           {token ? (
-            <button type="button" className="icon-link" title="Sign Out" aria-label="Sign Out" onClick={handleLogout}>
-              <LogOut size={20} strokeWidth={1.75} />
-            </button>
+            <div className="user-dropdown" ref={userMenuRef}>
+              <button type="button" className="icon-link" title="Account" aria-label="Account" onClick={() => setUserMenuOpen((prev) => !prev)}>
+                <User size={20} strokeWidth={1.75} />
+              </button>
+              {userMenuOpen && (
+                <div className="user-dropdown-menu">
+                  <Link to="/orders" className="user-dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                    My Orders
+                  </Link>
+                  <button type="button" className="user-dropdown-item" onClick={handleLogout}>
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link to="/login" className="icon-link" title="Account" aria-label="Account">
               <User size={20} strokeWidth={1.75} />
@@ -344,6 +368,16 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
+            <div className="mobile-nav-footer">
+              {token ? (
+                <>
+                  <Link to="/orders" className="mobile-nav-direct" onClick={() => setMobileNavOpen(false)}>My Orders</Link>
+                  <button type="button" className="mobile-nav-direct mobile-nav-logout" onClick={handleLogout}>Log Out</button>
+                </>
+              ) : (
+                <Link to="/login" className="mobile-nav-direct" onClick={() => setMobileNavOpen(false)}>Sign In</Link>
+              )}
+            </div>
           </div>
         </div>
       )}

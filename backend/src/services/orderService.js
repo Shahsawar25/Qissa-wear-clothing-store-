@@ -62,10 +62,13 @@ export const createOrderFromCart = async ({
     }
 
     const effectivePrice = product.discountPrice || product.price;
+    const image =
+      product.images?.length > 0 ? product.images[0].url : "";
 
     orderItems.push({
       product: product._id,
       name: product.name,
+      image,
       price: effectivePrice,
       color: cartItem.color,
       size: cartItem.size,

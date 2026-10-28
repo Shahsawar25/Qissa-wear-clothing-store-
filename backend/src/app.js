@@ -13,6 +13,9 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import addressRoutes from "./routes/addressRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -76,6 +79,15 @@ app.use("/api/orders", orderRoutes);
 
 // Payment Routes
 app.use("/api/payments", paymentRoutes);
+
+// User Routes
+app.use("/api/users", userRoutes);
+
+// Category Routes
+app.use("/api/categories", categoryRoutes);
+
+// Dashboard Routes
+app.use("/api/dashboard", dashboardRoutes);
 
 // Existing API Routes
 app.use("/api/v1", apiRouter);
